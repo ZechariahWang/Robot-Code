@@ -429,13 +429,35 @@ void newskillslesgoooo(){
   chassis.set_drive_pid(-5, -110);
   chassis.wait_drive();
 
+  pros::delay(1000);
+
+  chassis.set_drive_pid(4, 110);
+  chassis.wait_drive();
+
 
   chassis.set_turn_pid(90, 110);
   chassis.wait_drive();
 
 
-  chassis.set_drive_pid(15, 110);
+  chassis.set_drive_pid(16, 110);
   chassis.wait_drive();
+
+
+  chassis.set_turn_pid(0, 110);
+  chassis.wait_drive();
+
+
+  chassis.set_turn_pid(-26, -110);
+  chassis.wait_drive();
+
+
+  chassis.set_drive_pid(9, 110);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-9,-110);
+  chassis.wait_drive();
+
+
 
 }
 
@@ -556,4 +578,3 @@ void interfered_example() {
 // . . .
 // Make your own autonomous functions here!
 // . . .
-
