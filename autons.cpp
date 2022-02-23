@@ -1,5 +1,4 @@
 #include "main.h"
-// lol
 
 
 /////
@@ -144,17 +143,21 @@ void ProgrammingSkills(){
   chassis.wait_drive();
 
 
-  chassis.set_turn_pid(95, 110);
+  chassis.set_turn_pid(93, 110);
   chassis.wait_drive();
   chassis.set_angle(0);
 
 
-  chassis.set_drive_pid(24, 110, true);
+  chassis.set_drive_pid(24, 110, true, true);
   chassis.wait_drive();
 
   // Clamp Down
 
-  chassis.set_drive_pid(24, 110, true);
+  chassis.set_turn_pid(-3, -110);
+  chassis.wait_drive();
+  chassis.set_angle(0);
+
+  chassis.set_drive_pid(24, 110, true, true);
   chassis.wait_drive();
 
   // Clamp Up
@@ -180,11 +183,11 @@ void ProgrammingSkills(){
 
 
 
-  chassis.set_turn_pid(-100, -110);
+  chassis.set_turn_pid(-90, -110);
   chassis.wait_drive();
 
 
-  chassis.set_drive_pid(-10, -110, true);
+  chassis.set_drive_pid(-5, -110, true);
   chassis.wait_drive();
 
   // Tilter down
@@ -208,25 +211,233 @@ void ProgrammingSkills(){
 
 
 
-  chassis.set_turn_pid(-5, -110);
+  // chassis.set_turn_pid(-5, -110);
+  // chassis.wait_drive();
+  // chassis.set_angle(0);
+
+
+  chassis.set_turn_pid(25, 110);
+  chassis.wait_drive();
+
+
+  chassis.set_drive_pid(20, 110, true);
+  chassis.wait_drive();
+
+  // Clamp Up
+
+  chassis.set_drive_pid(-10, -110, true);
+  chassis.wait_drive();
+
+
+   chassis.set_turn_pid(0, 110);
+   chassis.wait_drive();
+
+
+
+   chassis.set_turn_pid(-25, -110);
+   chassis.wait_drive();
+
+
+
+   chassis.set_drive_pid(20, 110, true);
+   chassis.wait_drive();
+
+   // Clamp Down
+
+   chassis.set_drive_pid(-15, -110, true);
+   chassis.wait_drive();
+
+
+   chassis.set_turn_pid(0, 110);
+   chassis.wait_drive();
+
+
+   chassis.set_turn_pid(-90, -110);
+   chassis.wait_drive();
+
+
+
+   chassis.set_drive_pid(45, 110, true);
+   chassis.wait_drive();
+
+
+   chassis.set_turn_pid(0, 110);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(-48, -110, true, true);
+   chassis.wait_drive();
+
+
+}
+
+
+
+void newskillslesgoooo(){
+
+  // Go back
+
+  chassis.set_drive_pid(-5, -110, true);
+  chassis.wait_drive();
+
+  // Tilter Down
+
+
+  // Go forward
+
+  chassis.set_drive_pid(7, 110, true);
+  chassis.wait_drive();
+
+  // Turn to first yellow goal
+
+  chassis.set_turn_pid(93, 110);
   chassis.wait_drive();
   chassis.set_angle(0);
 
 
-  chassis.set_turn_pid(30, 110);
+  // Drive to goal
+
+  chassis.set_drive_pid(24, 110, true, true);
+  chassis.wait_drive();
+
+  // Clamp Down
+
+  chassis.set_turn_pid(-3, -110);
+  chassis.wait_drive();
+  chassis.set_angle(0);
+
+
+  // Lift goal up
+
+
+  // Turn to platform
+
+  chassis.set_turn_pid(22, 110);
+  chassis.wait_drive();
+
+  pros::delay(1000);
+
+
+  // Drive to platform
+
+  chassis.set_drive_pid(27, 110, true, true);
   chassis.wait_drive();
 
 
-  chassis.set_drive_pid(10, 110, true);
+  pros::delay(1000);
+
+
+  // Go back
+
+  chassis.set_drive_pid(-10, -110);
   chassis.wait_drive();
 
+  // Drop alliance goal
+
+
+  // Go forward
+
+  chassis.set_drive_pid(10, 110);
+  chassis.wait_drive();
+
+  // Turning 180 degrees
 
   chassis.set_turn_pid(0, 110);
   chassis.wait_drive();
 
 
-}
+  chassis.set_turn_pid(-158, -110);
+  chassis.wait_drive();
 
+  // Drive forward to alliance goal
+
+  pros::delay(1000);
+
+  chassis.set_drive_pid(10, 110);
+  chassis.wait_drive();
+
+
+  // Clamp goal with tilter
+
+
+  // Turn back to original heading
+
+  chassis.set_turn_pid(0, 110);
+  chassis.wait_drive();
+
+
+  chassis.set_turn_pid(38, 110);
+  chassis.wait_drive();
+
+
+  pros::delay(1000);
+
+
+  chassis.set_drive_pid(11, 110);
+  chassis.wait_drive();
+
+
+  chassis.set_drive_pid(-2, -110);
+  chassis.wait_drive();
+
+
+  pros::delay(1000);
+
+  chassis.set_turn_pid(0, 110);
+  chassis.wait_drive();
+
+
+  chassis.set_turn_pid(90, 110);
+  chassis.wait_drive();
+
+
+  chassis.set_drive_pid(26, 110);
+  chassis.wait_drive();
+
+
+
+  chassis.set_turn_pid(180, 110);
+  chassis.wait_drive();
+
+
+  chassis.set_drive_pid(10, 110);
+  chassis.wait_drive();
+
+
+  chassis.set_drive_pid(-10, -110);
+  chassis.wait_drive();
+
+
+  chassis.set_turn_pid(270, 110);
+  chassis.wait_drive();
+
+
+  chassis.set_drive_pid(15, 110);
+  chassis.wait_drive();
+
+
+  pros::delay(1000);
+
+
+  chassis.set_turn_pid(0, 80);
+  chassis.wait_drive();
+
+
+  pros::delay(1000);
+
+
+  chassis.set_drive_pid(-5, -110);
+  chassis.wait_drive();
+
+
+  chassis.set_turn_pid(90, 110);
+  chassis.wait_drive();
+
+
+  chassis.set_drive_pid(15, 110);
+  chassis.wait_drive();
+
+}
 
 ///
 // Wait Until and Changing Max Speed
@@ -345,3 +556,4 @@ void interfered_example() {
 // . . .
 // Make your own autonomous functions here!
 // . . .
+
