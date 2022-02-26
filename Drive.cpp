@@ -1,6 +1,4 @@
 // MAIN CPP FILE FOR ROBOT CONTROL (Driver control, autonomous, etc)
-
-
 ///////////////////////////////////////////////////
 ////////////////Import Libraries///////////////////
 ///////////////////////////////////////////////////
@@ -22,9 +20,10 @@ double y;
 double h;
 
 bool transmissionvalue = false;
-bool Switch = false;
+bool Switch = true;
 bool value = false;
 bool ClampPos = false;
+bool bind = false;
 
 
 int TransmissionDelay = 50;
@@ -45,15 +44,15 @@ int TilterDelay = 100;
 void SetDrive(int left, int right){
 
   DriveFrontLeft.move_voltage(left);
-//  DriveBackLeft.move_voltage(left);
+  DriveBackLeft.move_voltage(left);
   DriveFrontRight.move_voltage(right);
-//  DriveBackRight.move_voltage(right);
+  DriveBackRight.move_voltage(right);
 
   if (Switch){
 
-//    TransmissionLeft.move_voltage(left);
+    TransmissionLeft.move_voltage(left);
 
-//    TransmissionRight.move_voltage(right);
+    TransmissionRight.move_voltage(right);
 
   }
 
@@ -85,7 +84,7 @@ void SetDriveMotors(){
 
   }
 
-  SetDrive((rightXjoystick + leftYjoystick) * 80, (leftYjoystick - rightXjoystick) * 80);
+  SetDrive((rightXjoystick + leftYjoystick) * 94.4881889764, (leftYjoystick - rightXjoystick) * 94.4881889764);
 
 }
 
@@ -93,27 +92,26 @@ void SetDriveMotors(){
 ///////////Transmission Control Function///////////
 ///////////////////////////////////////////////////
 
-bool bindtransmission = false;
 
+bool hi = false;
 
 void TransmissionControl(){
 
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)){
-        bindtransmission = !bindtransmission;
+        hi = !hi;
     }
 
-    if(bindtransmission){
+    if(hi){
       Switch = false;
       TransmissionPiston.set_value(true);
-      chassis.pto_toggle({TransmissionLeft, TransmissionRight}, true);
       pros::delay(TransmissionDelay);
+      TransmissionLeft.move_voltage(-7000);
+      TransmissionRight.move_voltage(-7000);
     }
     else{
-
+      pros::delay(TransmissionDelay);
       TransmissionPiston.set_value(false);
       Switch = true;
-      chassis.pto_toggle({TransmissionLeft, TransmissionRight}, false);
-      pros::delay(TransmissionDelay);
 
     }
 
@@ -208,5 +206,41 @@ void SetLiftMotors(){
     int liftpower = 0;
     SetLift(liftpower);
   }
+
+}
+
+bool check = false;
+
+void SetMotorType(){
+
+  if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)){
+      check = !check;
+  }
+
+  if(check){
+
+    DriveFrontLeft.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    DriveBackLeft.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    DriveFrontRight.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    DriveBackRight.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+
+    TransmissionLeft.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    TransmissionRight.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+
+  }
+
+  else{
+
+    DriveFrontLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    DriveBackLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    DriveFrontRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    DriveBackRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+    TransmissionLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    TransmissionRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+  }
+
+  pros::delay(10);
 
 }
