@@ -11,14 +11,14 @@
 Drive chassis (
   // Left Chassis Ports (negative port will reverse it!)
   //   the first port is the sensored port (when trackers are not used!)
-  {-4}
+  {-11, -3}
 
   // Right Chassis Ports (negative port will reverse it!)
   //   the first port is the sensored port (when trackers are not used!)
-  ,{13}
+  ,{20, 19}
 
   // IMU Port
-  ,15
+  ,14
 
   // Wheel Diameter (Remember, 4" wheels are actually 4.125!)
   //    (or tracking wheel diameter)
@@ -26,13 +26,13 @@ Drive chassis (
 
   // Cartridge RPM
   //   (or tick per rotation if using tracking wheels)
-  ,200
+  ,600
 
   // External Gear Ratio (MUST BE DECIMAL)
   //    (or gear ratio of tracking wheel)
   // eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 2.333.
   // eg. if your drive is 36:60 where the 60t is powered, your RATIO would be 0.6.
-  ,1.4
+  ,0.42857142857
 
   // Uncomment if using tracking wheels
   /*
@@ -50,89 +50,7 @@ Drive chassis (
   // ,1
 );
 
-void Commands(){
 
-  chassis.set_drive_pid(24, 100, true);
-  chassis.wait_drive();
-  chassis.set_turn_pid(90, 110);
-  chassis.wait_drive();
-
-  chassis.set_swing_pid(ez::RIGHT_SWING, 0, 100);
-
-}
-
-void SkillsAuton(){
-
-
-//    chassis.pto_toggle({TransmissionLeft, TransmissionRight}, true);
-
-  chassis.reset_drive_sensor();
-  chassis.set_drive_pid(-5, -110, true);
-  chassis.wait_drive();
-  std::cout << "Done 1" << std::endl;
-
-
-  chassis.reset_drive_sensor();
-  chassis.set_drive_pid(5, 110, true);
-  chassis.wait_drive();
-  std::cout << "Done 2" << std::endl;
-
-
-  chassis.set_turn_pid(90, 110);
-  chassis.wait_drive();
-  chassis.set_angle(0);
-  std::cout << "Done 3" << std::endl;
-
-  chassis.reset_drive_sensor();
-  chassis.set_drive_pid(24, 110, true);
-  chassis.wait_drive();
-  std::cout << "Done 4" << std::endl;
-
-  pros::delay(1000);
-
-  chassis.set_turn_pid(90, 110);
-  chassis.wait_drive();
-  std::cout << "Done 5" << std::endl;
-
-
-}
-
-
-
-void TempAuton(){
-
-    chassis.pto_toggle({TransmissionLeft, TransmissionRight}, true);
-
-    chassis.set_drive_pid(-5, -110, false, true);
-
-    chassis.wait_drive();
-
-    chassis.set_turn_pid(180, 110);
-
-    chassis.wait_drive();
-
-
-
-}
-
-void Testing(){
-
-  chassis.set_turn_pid(90, 90);
-  chassis.wait_drive();
-
-  pros::delay(10);
-
-  chassis.set_turn_pid(180, 90);
-  chassis.wait_drive();
-
-  pros::delay(10);
-
-  chassis.set_turn_pid(90, 90);
-  chassis.wait_drive();
-
-
-
-}
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -142,7 +60,7 @@ void Testing(){
  */
 void initialize() {
   // Print our branding over your terminal :D
-//  ez::print_ez_template();
+  ez::print_ez_template();
 
   pros::delay(500); // Stop the user from doing anything while legacy ports configure.
 
@@ -160,36 +78,11 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
 
-    Auton("Programming Skills\n\ntemp 1", SkillsAuton),
-
-    Auton("Temp Auton\n\ntemp 2", TempAuton),
-
   });
 
   // Initialize chassis and auton selector
   chassis.initialize();
   ez::as::initialize();
-
-  chassis.pto_add({TransmissionLeft, TransmissionRight});
-
-  // Motor presets
-
-  DriveFrontLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  DriveBackLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  DriveFrontRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  DriveBackRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-
-
-  LeftLift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-  RightLift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-
-
-  imu_sensor.reset();
-  imu_sensor2.reset();
-
-  imu_sensor.tare_rotation();
-  imu_sensor2.tare_rotation();
-
 }
 
 
@@ -219,6 +112,7 @@ void competition_initialize() {
 }
 
 
+
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -230,54 +124,291 @@ void competition_initialize() {
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
+
+ void AutonomousSkills(){
+
+   // Intialize Events
+
+   Clamp.set_value(true);
+   RobotGoalCover.set_value(true);
+
+   // Go back and get dat goal
+
+   chassis.set_drive_pid(-25, -80, true);
+   chassis.wait_drive();
+
+   // Get thet goal
+
+   Tilter.set_value(true);
+
+   // go back
+
+   chassis.set_drive_pid(25, 110, true);
+   chassis.wait_drive();
+
+   // turn
+
+   chassis.set_turn_pid(100, 90);
+   chassis.wait_drive();
+   chassis.set_angle(0);
+
+   // drive to yellow goal
+
+   chassis.set_drive_pid(235, 80, true, true);
+   chassis.wait_drive();
+
+   //get goal
+
+   Clamp.set_value(false);
+
+   // Become not andrew
+
+   chassis.set_turn_pid(-10, -90);
+   chassis.wait_drive();
+   chassis.set_angle(0);
+
+
+   // Turn so we dont commit suicide into the platform
+
+   // Go to other side
+
+   chassis.set_drive_pid(305, 110, true);
+   chassis.wait_drive();
+
+   // Drop goal on other side
+
+
+   Clamp.set_value(true);
+
+   // Drive back a bit
+
+   chassis.set_drive_pid(-60, -110, true);
+   chassis.wait_drive();
+
+   // Turn to enemy goal
+
+   chassis.set_turn_pid(-90, -110);
+   chassis.wait_drive();
+
+   // Drive to goal
+
+   chassis.set_drive_pid(80, 80, true);
+   chassis.wait_drive();
+
+   // Grab goal
+
+   Clamp.set_value(false);
+
+
+   // Reorientate robot
+
+   chassis.set_turn_pid(-90, -110);
+   chassis.wait_drive();
+
+   // Drive backwards
+
+   chassis.set_drive_pid(-240, -110, true);
+   chassis.wait_drive();
+
+   // Drop goal
+
+   Tilter.set_value(false);
+
+
+   // Go forward
+
+   chassis.set_drive_pid(160, 110, true);
+   chassis.wait_drive();
+
+   // Turn to middle goal
+
+   chassis.set_turn_pid(-50, -110);
+   chassis.wait_drive();
+
+   // Drive to middle goal
+
+   chassis.set_drive_pid(-240, -90, true);
+   chassis.wait_drive();
+
+
+   Tilter.set_value(true);
+
+
+   chassis.set_turn_pid(-45, -110);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(-460, -90, true);
+   chassis.wait_drive();
+
+
+   Tilter.set_value(false);
+
+
+   chassis.set_drive_pid(160, 110, true);
+   chassis.wait_drive();
+
+
+   chassis.set_turn_pid(-90, -110);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(-170, -110, true);
+   chassis.wait_drive();
+
+
+   Tilter.set_value(true);
+
+
+   chassis.set_drive_pid(90, 110, true);
+   chassis.wait_drive();
+
+
+   chassis.set_turn_pid(-180, 110);
+   chassis.wait_drive();
+
+
+   Clamp.set_value(true);
+
+
+
+   chassis.set_turn_pid(-90, -110);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(40, 110, true);
+   chassis.wait_drive();
+
+
+   chassis.set_turn_pid(0, 110);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(200, 110, true);
+   chassis.wait_drive();
+
+
+   Clamp.set_value(false);
+
+
+   chassis.set_drive_pid(-200, -110, true);
+   chassis.wait_drive();
+
+
+   chassis.set_turn_pid(90, 110);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(80, 110, true);
+   chassis.wait_drive();
+
+
+   Clamp.set_value(true);
+
+
+   chassis.set_drive_pid(-80, -110, true);
+   chassis.wait_drive();
+
+
+   chassis.set_turn_pid(0, 110);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(330, 110, true);
+   chassis.wait_drive();
+
+
+
+   chassis.set_turn_pid(90, 110);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(-80, -110, true);
+   chassis.wait_drive();
+
+   Tilter.set_value(false);
+   Clamp.set_value(true);
+
+
+   chassis.set_drive_pid(80, 110, true);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(80, 110, true);
+   chassis.wait_drive();
+
+
+   chassis.set_turn_pid(0, 110);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(155, 110, true);
+   chassis.wait_drive();
+
+
+   chassis.set_turn_pid(-90, -110);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(80, 110, true);
+   chassis.wait_drive();
+
+
+   Clamp.set_value(false);
+
+
+   chassis.set_drive_pid(-50, -110, true);
+   chassis.wait_drive();
+
+
+   chassis.set_turn_pid(-180, -110);
+   chassis.wait_drive();
+
+
+   chassis.set_drive_pid(800, 110, true);
+   chassis.wait_drive();
+
+
+   cout << "Finished" << endl;
+
+ }
+
+
 void autonomous() {
   chassis.reset_pid_targets(); // Resets PID targets to 0
   chassis.reset_gyro(); // Reset gyro position to 0
   chassis.reset_drive_sensor(); // Reset drive sensors to 0
   chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
-  ProgrammingSkills();
+  // drive_and_turn();
+
+  AutonomousSkills();
 
 }
 
 
 
-bool pto_intake_enabled = false;
-
-void pto_intake(bool toggle) {
-  pto_intake_enabled = toggle;
-  chassis.pto_toggle({TransmissionLeft, TransmissionRight}, toggle);
-  TransmissionPiston.set_value(toggle);
-  if (toggle) {
-    TransmissionLeft.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-    TransmissionRight.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  }
-}
-
-void set_intake(int input) {
-  if (!pto_intake_enabled) return;
-  TransmissionLeft = input;
-  TransmissionRight = input;
-}
-
+/**
+ * Runs the operator control code. This function will be started in its own task
+ * with the default priority and stack size whenever the robot is enabled via
+ * the Field Management System or the VEX Competition Switch in the operator
+ * control mode.
+ *
+ * If no competition control is connected, this function will run immediately
+ * following initialize().
+ *
+ * If the robot is disabled or communications is lost, the
+ * operator control task will be stopped. Re-enabling the robot will restart the
+ * task, not resume it from where it left off.
+ */
 void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
 
   while (true) {
 
-  //  chassis.arcade_standard(ez::SPLIT);
-
-    SetDriveMotors();
-
-    TransmissionControl();
-
-    SetClampPos();
-
-    SetTiltMotors();
-
-    SetLiftMotors();
-    // Tank control
+    chassis.arcade_standard(ez::SPLIT);
+ // Tank control
     // chassis.arcade_standard(ez::SPLIT); // Standard split arcade
     // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
     // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
